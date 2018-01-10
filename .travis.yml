@@ -1,15 +1,27 @@
-language: java
 
-branches:
-  only:
-    - master
+sudo: required
+language: java
 
 jdk:
   - oraclejdk8
 
-before_install: "git clone -b travis `git config --get remote.origin.url` target/travis"
 
-script: "mvn deploy --settings target/travis/settings.xml -Dsettings.security=target/travis/settings-security.xml -Dmaven.javadoc.skip=true"
 
-after_success:
-  - mvn cobertura:cobertura coveralls:cobertura
+script:
+  - mvn clean cobertura:cobertura -Dtest=ExecutionTimeQuartzIntegrationTest#mustMatchLowerBoundDateMatchingCronExpressionRequirements -DfailIfNoTests=false
+
+before_deploy:
+- tar -zcvf coverage-result.tar.gz /home/travis/build/leusonmario/cron-utils/target/site/cobertura
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "X2P73uMwO6sW9xRmtpzay6sBUrPiZPtMW1AqIR0TR/V29XxnfjblSGmw+ub2vTHQiDcpAxIi4lsg2xWtqy3MPb3JJz0bfB71iof2RsgMzXQsUwFN+R2Z3PqZT2ltUVKoNJClxCXZ81IhQNtnR55WB6ahn10VxsUS2VkSBYU6mGXMxGoKwGkrgemnDhgLdUkeSDbvd9R9BrmQbuHjg50e//gR4KleCRoTB5xsAiGqxbQzcO6JWDd/dVu8xR/vk4+L5DO5l3d7HTzahTSx79V5KuWIhSL2BlMpHB5KhLavhlrwtQHEipRq7knWJlfCLHsfx2XwaFJJ3Prgc3Bya9BvoFFzixOQrEF462Qk7e5ZB1bgxO2STpfFHKQdrP3jR8/2PTZlBmC+j+xAHBPns5km0s7imvzeDVi/nmWGQCuXeU+zSr6tro6iS5kVDpLe0UGWMAJ4+RRHDd2THzgbXymREXalL+gGUxFuyN1usfaejyktg3eg0T8df8JFUAk0Ya6e1v6uD1J6x4nfjv25uu/JFVg3tLDab20pv3sJAtcsbGkfbfu6zq3bodo+6VwvC7w/PlvZTMvvb59URcnU/I0Ac5lgTi7jFACWNOW5q0tPJ6Q3OjcTjIpLz8UXghuYq5neyYY0otM+hIqR1mgg6Ef8ZMGyMu4tfBQC/vSOuC4v6Uk="
+
+
+  file: coverage-result.tar.gz
+  file_glob: true
+  overwrite: true
+  skip_cleanup: true
+  on:
+    tags: true
