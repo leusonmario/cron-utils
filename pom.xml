@@ -250,6 +250,7 @@
                 <version>1.6.2</version>
                 <extensions>true</extensions>
                 <configuration>
+<testFailureIgnore>true</testFailureIgnore>
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
@@ -293,6 +294,17 @@
         		</execution>
     		</executions>
 	    </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+              <format>xml</format>
+              <maxmem>256m</maxmem>
+              <!-- aggregated reports for multi-module projects -->
+              <aggregate>true</aggregate>
+          </configuration>
+         </plugin>
         </plugins>
 
         <extensions>
@@ -330,7 +342,18 @@
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
+                <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+              <format>xml</format>
+              <maxmem>256m</maxmem>
+              <!-- aggregated reports for multi-module projects -->
+              <aggregate>true</aggregate>
+          </configuration>
+         </plugin>
+        </plugins>
             </build>
         </profile>
 
@@ -350,7 +373,18 @@
                         <artifactId>coveralls-maven-plugin</artifactId>
                         <version>2.2.0</version>
                     </plugin>
-                </plugins>
+                <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+              <format>xml</format>
+              <maxmem>256m</maxmem>
+              <!-- aggregated reports for multi-module projects -->
+              <aggregate>true</aggregate>
+          </configuration>
+         </plugin>
+        </plugins>
             </build>
         </profile>
     </profiles>
